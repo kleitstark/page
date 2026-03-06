@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
+</head>
+<style>
+
+    :root {
+        font-family: monospace;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: rgb(36, 36, 36);
+    }
+
+    header{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        /* background: radial-gradient(circle,rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%); */
+        background: rgba(12, 12, 12, 0.517);
+        padding: 0px 50px;
+        margin: 0 20px;
+        max-width: 50rem;
+        border-radius: 50px;
+        backdrop-filter: blur(24px);
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+    }
+
+    header:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 2px rgba(101, 101, 101, 0.5);
+        border-color: #c6c6c6;
+    }
+
+    .hamburger {
+        display: none; 
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .hamburger span {
+        width: 25px;
+        height: 3px;
+        background-color: rgb(249, 249, 16);
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 550px) {
+        textarea {
+            font-size: 16px; 
+        }
+        .hamburger { 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+        } 
+
+        nav {
+            display: none; 
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: transparent;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav.active { display: flex; } 
+
+        ul { flex-direction: column; gap: 15px; }
+
+        .hamburger.is-active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.is-active span:nth-child(2) { opacity: 0; }
+        .hamburger.is-active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    }
+
+    @media(min-width: 551px) {
+        nav {display: flex;}
+    }
+
+    .island {
+        display: flex;
+        justify-content: center;
+        position: fixed;
+        top: 20px;
+        width: 100%;
+        z-index: 10;
+    }
+
+    ul li a {
+        position: relative;
+        text-decoration: none;
+        color: rgb(249, 249, 16);
+    }
+
+    ul li a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 0;
+        height: 2px;
+        background-color: rgb(249, 249, 16);
+        transition: all 0.3s ease;
+    }
+
+    ul li a:hover::after {
+        width: 100%;
+        background-color: rgb(115, 0, 255);
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+    }
+
+    a {
+        font-size: 15px;
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: rgb(115, 0, 255);
+    }
+
+    .logo {
+        position: relative;
+        padding: 5px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid rgb(115, 115, 115);
+        cursor: pointer;
+    }
+
+    .badge {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: rgb(94, 186, 49);
+        position: absolute;
+        bottom: 8px;
+        right:3px;
+        border: 2px solid black;
+    }
+
+    section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        padding: 20px;
+        /* position: sticky;
+        top: 0; */
+    }
+
+    .hero {
+        background-color: #313a4a7a;
+    }
+
+    .resume {
+        /* scroll-margin-top: 53px; */
+        /* background: url("https://img.freepik.com/free-vector/abstract-paper-cut-shape-wave-background_474888-4649.jpg?semt=ais_rp_progressive&w=740&q=80") 
+                center / cover 
+                no-repeat; */
+        background: linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    }
+
+    .info {
+        /* scroll-margin-top: 53px; */
+    /* background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url("https://img.freepik.com/free-vector/background-wave-design-gradient-template_483537-1388.jpg?semt=ais_hybrid&w=740&q=80")
+                center / cover
+                no-repeat; */
+        background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    }
+
+    .title {
+        font-size: clamp(5rem, 15vw, 18rem);
+        color: white;
+        background: transparent;
+        text-align: center;
+    }
+
+    .giuse {
+        width: 60px;
+        height: 60px;
+        border-radius:50%;
+        background-color: rgba(76, 76, 76, 0.278);
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        border: 2px solid rgba(158, 158, 158, 0.736);
+        display: none;
+        z-index: 10;
+        transition: all 0.3s ease;
+    }
+
+    .giuse::after {
+        content: "🫠";
+        font-size: 30px;
+    }
+
+    .giuse:hover {
+        width: 70px;
+        height: 70px;
+        background-color: rgba(109, 109, 109, 0.857);
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+        height: 30rem;
+    }
+
+    .mac-window {
+        display: flex;
+        flex-direction: column;
+        width: 60rem;
+        height: 40rem;
+        border-radius: 5px;
+        background-color: rgba(2, 2, 4, 0.418);
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    }
+
+    .mac-window-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        background-color: rgb(22, 22, 22);
+        width: 100%;
+        height: 20px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        padding: 8px 10px;
+    }
+
+    .dot-red {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .dot-yellow {
+        width: 10px;
+        height: 10px;
+        background-color: rgb(230, 200, 68);
+        border-radius: 50%;
+    }
+    .dot-green {
+        width: 10px;
+        height: 10px;
+        background-color: rgb(47, 201, 39);
+        border-radius: 50%;
+    }
+
+    .mac-window-main {
+        display: flex;
+        justify-content: flex-start;
+        height: 100%;
+        padding: 10px;
+        color: rgba(255, 255, 255, 0.648);
+    }
+
+    textarea {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        resize: none;
+        color: rgba(255, 255, 255, 0.793);
+    }
+
+    textarea:focus {
+        outline: none;
+    }
+
+    .aside {
+        width: 40rem;
+        height: 50rem;
+        background-color: transparent;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: 99;
+        /* backdrop-filter: blur(5px); */
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        /* border: 1px solid rgba(85, 85, 85, 0.497); */
+        border-top-left-radius: 18px;
+        border-bottom-left-radius: 18px;
+    }
+
+    .aside.open {
+        transform: translateX(0);
+    }
+
+    @media(max-width: 519px) {
+        .aside {
+            width: 100%;
+        }
+    }
+
+    .jarek-ctn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+    }
+
+    #jarek {
+        data-shown: "true"
+    }
+</style>
+<body>
+    <div class="island">
+            <header>
+            <div class="logo" id="avatar">
+                <img src="https://i.pinimg.com/736x/96/7d/30/967d3071f9592e85771d490d89b255c7.jpg" width="50px" height="50px" class="avatar"></img>
+                <div class="badge"></div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#resume">Supreme</a></li>
+                    <li><a href="#info">Info</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+    </header>
+    </div>
+    <main>
+        <section class="hero" id="hero">
+            <div class="mac-window">
+                <div class="mac-window-header">
+                    <div class="dot-red"></div>
+                    <div class="dot-yellow"></div>
+                    <div class="dot-green"></div>
+                </div>
+                <div class="mac-window-main">
+                    <textarea name="textarea" id="textcode"></textarea>
+                </div>
+            </div>
+        </section>
+        <section class="resume" id="resume">
+            <h1 class="title"><em>Supreme</em></h1>
+        </section>
+        <section class="info" id="info">
+            <h1 class="title"><em>Info</em></h1>
+        </section>
+        <div class="giuse" id="giuse"></div>
+        <div class="aside" id="aside">
+            <elevenlabs-convai agent-id="agent_1901kk1vg0egf71st2bntpmtfwpm"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+        </div>
+    </main>
+    <footer id="contact">
+        <h1>Footer</h1>
+    </footer>
+</body>
+
+<script>
+        const giuse = document.getElementById("giuse");
+        giuse.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        })
+
+        window.addEventListener("scroll", () => {
+        if (window.scrollY > 200) {
+            giuse.style.display = "flex";
+        } else {
+            giuse.style.display = "none";
+        }
+        });
+
+        const textarea = document.getElementById("textcode")
+        textarea.focus();
+        textarea.value = "frasntoro:~$ ";
+        textarea.addEventListener("keydown", async(e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+
+                const lines = textarea.value.split("\n");
+                const lastLine = lines[lines.length - 1];
+
+                const command = lastLine.replace("frasntoro:~$ ", "").trim();
+
+                if (command === "chat") {
+                    aside.classList.add("open");
+                }
+
+                if (command === "close") {
+                    aside.classList.remove("open");
+                }
+
+                if (command === "info") {
+                    try {
+                        const response = await fetch('https://ipapi.co/json/');
+                        const data = await response.json();
+                        const report = `
+                \n
+                [ANALYSIS COMPLETE]
+                ------------------------------------
+                > NETWORK:  ${data.org} (ASN: ${data.asn})
+                > LOCATION: ${data.city}, ${data.region} (${data.country_name})
+                > COORDS:   LAT ${data.latitude} / LON ${data.longitude}
+                > OS:       ${navigator.platform}
+                > CORES:    ${navigator.hardwareConcurrency} CPU threads
+                ------------------------------------
+                \n
+                `;
+                        textarea.value += report + "\nfrasntoro:~$ ";
+                        textarea.scrollTop = textarea.scrollHeight;
+                    } catch (err) {
+                        textarea.value += "\n[ERROR] Analysis failed.\nfrasntoro:~$ ";
+                    }
+                    return;
+                }
+
+                if (command === "meteo") {
+                    try {
+                        const posRes = await fetch('https://ipapi.co/json/');
+                        const posData = await posRes.json();
+                        const { latitude, longitude, city } = posData;
+
+                        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+                        const weatherRes = await fetch(weatherUrl);
+                        const weatherData = await weatherRes.json();
+
+                        const temp = weatherData.current_weather.temperature;
+                        const wind = weatherData.current_weather.windspeed;
+
+                        const report = `
+                \n
+                [WEATHER REPORT]
+                > Location: ${city.toUpperCase()}
+                > Temp:     ${temp}°C
+                > Wind:     ${wind} km/h
+                \n`;
+
+                        textarea.value += report + "\nfrasntoro:~$ ";
+                        textarea.scrollTop = textarea.scrollHeight;
+
+                    } catch (err) {
+                        textarea.value += "\n[ERROR] Connection failed.\nfrasntoro:~$ ";
+                    }
+                    return;
+                }
+
+                if(command === "clear") textarea.value = "\nfrasntoro:~$ ";
+                else                 textarea.value += "\nfrasntoro:~$ ";
+            }
+        });
+
+        const aside = document.getElementById("aside")
+        const avatar = document.getElementById("avatar")
+        
+        avatar.addEventListener("click", () => {
+            aside.classList.toggle("open")
+        })
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        const widget = document.getElementById('elevenlabs-convai');
+        if (widget) {
+            widget.addEventListener('load', (e) => { 
+                console.log(widget)
+                console.log(e)
+            });
+        }
+
+        const hamburger = document.getElementById("hamburger");
+        const navMenu = document.getElementById("nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            hamburger.classList.toggle("is-active");
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove("active");
+                hamburger.classList.remove("is-active");
+                aside.classList.remove("open")
+            });
+        });
+
+</script>
+</html>
